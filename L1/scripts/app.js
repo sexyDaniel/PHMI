@@ -11,16 +11,16 @@ let $select = $('.form-select').on('click',()=>{
     $('.alert').remove()
     if($select.val()==='1'){
         $('.input-form').append(`<div class="alert alert-primary" role="alert">
-             У вас будет 1.5 секунды, чтобы запомнить ${symbolsCount} римских цифр, после чего необходимо отметить запомненные вами цифры.
+             У вас будет 1.75 секунды, чтобы запомнить ${symbolsCount} римских цифр, после чего необходимо отметить запомненные вами цифры.
         </div>`);
     }else if($select.val()==='2'){
         $('.input-form').append(`<div class="alert alert-primary" role="alert">
-             У вас будет 1.5 секунды, чтобы запомнить ${symbolsCount} фруктов, например &#127826, после чего необходимо отметить запомненные вами цифры.
+             У вас будет 1.75 секунды, чтобы запомнить ${symbolsCount} фруктов, например &#127826, после чего необходимо отметить запомненные вами фрукты.
         </div>`);
     }
 })
 
-let $startButton = $("#start-button").on('click',()=>{
+let $startButton = $("#start-button").on('click', ()=>{
     if(!$('#respobdent-name').val()){
         alert("Укажите свое имя");
         return
@@ -29,13 +29,14 @@ let $startButton = $("#start-button").on('click',()=>{
         alert("Укажите тип проверки");
         return
     }
+    
     if($('.form-select').val()==='1'){
         OutputRandomTable(romes);
     }else {
         OutputRandomTable(fruits,true);
     }
     SetDisable(true);
-    setTimeout(Clear,1500)
+    setTimeout(Clear,1750)
 })
 
 function Clear(){
@@ -113,7 +114,8 @@ function CheckAnswers(){
     Неправильных ответов: ${wrongCountAnswers}`);
     SaveData(localStorage.length,{
         name:$('#respobdent-name').val(),
-        rightCount: respondentAnswer.length,
+        rightCount: rightCOuntAnswers,
+        wrongCount:6-respondentAnswer.length+wrongCountAnswers,
         typeCheck: $('.form-select').val(),
         isRamdomSize: $('#random-fontsize:checked').length !== 0
     });
