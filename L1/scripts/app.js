@@ -8,13 +8,13 @@ let respondentAnswer = [];
 let symbolsCount = 6;
 
 let $select = $('.form-select').on('click',()=>{
-    $('.alert').remove()
+    $('.info-bottom').remove()
     if($select.val()==='1'){
-        $('.input-form').append(`<div class="alert alert-primary" role="alert">
+        $('.input-form').append(`<div class="info-bottom alert alert-primary" role="alert">
              У вас будет 1.75 секунды, чтобы запомнить ${symbolsCount} римских цифр, после чего необходимо отметить запомненные вами цифры.
         </div>`);
     }else if($select.val()==='2'){
-        $('.input-form').append(`<div class="alert alert-primary" role="alert">
+        $('.input-form').append(`<div class="info-bottom alert alert-primary" role="alert">
              У вас будет 1.75 секунды, чтобы запомнить ${symbolsCount} фруктов, например &#127826, после чего необходимо отметить запомненные вами фрукты.
         </div>`);
     }
