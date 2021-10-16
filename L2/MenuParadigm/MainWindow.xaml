@@ -1,0 +1,80 @@
+﻿<Window x:Class="MenuParadigm.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MenuParadigm"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="422" Width="850">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="513*"></ColumnDefinition>
+            <ColumnDefinition Width="337*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*"></RowDefinition>
+                <RowDefinition Height="155*"></RowDefinition>
+                <RowDefinition Height="80*"></RowDefinition>
+                <RowDefinition Height="205*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid>
+                <WrapPanel VerticalAlignment="Center">
+                    <TextBlock FontSize="15">Текущая директория:</TextBlock>
+                    <TextBlock FontSize="15" Name="CurrentDir"></TextBlock>
+                </WrapPanel>
+            </Grid>
+            <GroupBox Header="Путешествие по дирректориям" Grid.Row="1">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <WrapPanel Margin="0,0,0,10">
+                        <TextBox  FontSize="15" MinWidth="250px" Margin="0,0,5,0" Name="CurrentDirrectory"></TextBox>
+                        <Button  FontSize="15" Click="CDButton_Click">Перейти</Button>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Button  FontSize="15" Click="PrevButton_Click" Name="PrevButton" Margin="0,0,10,0">Вперед</Button>
+                        <Button  FontSize="15" Click="BackButton_Click" Name="BackButton">Назад</Button>
+                    </WrapPanel>
+
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Вывод доп информации" Margin="0,6,0,0" Grid.Row="2">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Button Click="MoreInfoButton_Click" FontSize="18">Вывести</Button>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Смена формата файла" Grid.Row="3" Margin="0,8,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="243*"></ColumnDefinition>
+                        <ColumnDefinition Width="170*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0">
+                        <WrapPanel Margin="0,0,0,5">
+                            <TextBlock FontSize="15" Margin="0,0,5,0">Расширение:</TextBlock>
+                            <TextBox FontSize="15" Name="FormatName" MinWidth="100"></TextBox>
+                        </WrapPanel>
+                        <WrapPanel Margin="0,0,0,5">
+                            <CheckBox FontSize="15" Click="IsAllFilesButton_click" Name="IsAllFiles" Margin="0,0,5,0"></CheckBox>
+                            <TextBlock  FontSize="15">  Все файлы</TextBlock>
+                        </WrapPanel>
+                        <Button  FontSize="15" Width="90" Click="ChangeFileButton_Click" HorizontalAlignment="Left">Сменить</Button>
+                    </StackPanel>
+                    <ListBox Grid.Column="1" SelectionMode="Multiple" Name="FilesList">
+                    </ListBox>
+                </Grid>
+            </GroupBox>
+
+                <!--<Grid Margin="5,0,0,0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Button Click="HelpButton_Click">Помощь</Button>
+                </Grid>-->
+
+        </Grid>
+        <Grid Grid.Column="1">
+            <DataGrid  Name="GridList">
+                <DataGrid.Columns>
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>

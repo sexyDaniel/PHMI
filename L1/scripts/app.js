@@ -101,20 +101,20 @@ function CheckAnswers(){
     console.log(respondentAnswer);
     console.log(rightAnswerArr);
 
-    let rightCOuntAnswers = 0;
+    let rightCountAnswers = 0;
     let wrongCountAnswers = 0;
     for(let i = 0;i<respondentAnswer.length;i++){
         if(rightAnswerArr.includes(respondentAnswer[i]))
-            rightCOuntAnswers++;
+            rightCountAnswers++;
         else 
             wrongCountAnswers++;
     }
 
-    alert(`Правильных ответов: ${rightCOuntAnswers} из ${symbolsCount}
+    alert(`Правильных ответов: ${rightCountAnswers} из ${symbolsCount}
     Неправильных ответов: ${wrongCountAnswers}`);
     SaveData(localStorage.length,{
         name:$('#respobdent-name').val(),
-        rightCount: rightCOuntAnswers,
+        rightCount: rightCountAnswers,
         wrongCount:6-respondentAnswer.length+wrongCountAnswers,
         typeCheck: $('.form-select').val(),
         isRamdomSize: $('#random-fontsize:checked').length !== 0
@@ -128,7 +128,7 @@ function DisabledInput(){
         $('.answer:checkbox:not(:checked)').prop('disabled', true)
     }else{
         $('.answer:checkbox:not(:checked)').prop('disabled', false)
-    }
+    } 
 }
 
 function Restart(){
