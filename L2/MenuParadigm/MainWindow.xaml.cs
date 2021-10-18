@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using Paradigms.Application.Commands;
 
 namespace MenuParadigm
 {
@@ -23,34 +24,26 @@ namespace MenuParadigm
     public partial class MainWindow : Window
     {
 
-        private string currentCatalog = @"C:\Users\Acer\Desktop\Semesters\1 семестр";
+        private string currentCatalog = Directory.GetCurrentDirectory();
 
         public MainWindow()
         {
             InitializeComponent();
             CurrentDirrectory.Text = currentCatalog;
-            CurrentDir.Text = currentCatalog;
             WriteFileAndDirrectories();
         }
 
         private async void WriteFileAndDirrectories(bool isMore = false) 
         {
-            var res = isMore ? await DirectoryWorker.ExecuteLs("ls -l", currentCatalog) : await DirectoryWorker.ExecuteLs("ls", currentCatalog);
-            GridList.ItemsSource = res;
+            var command = new LsCommand();
+            var res = isMore ? await command.Execute("-l", currentCatalog) :await command.Execute("", currentCatalog);
+            GridList.ItemsSource = res.Result;
             WriteFilesList();
         }
 
         private void CDButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!Directory.Exists(CurrentDirrectory.Text)) 
-            {
-                MessageBox.Show("Дирректории не существует");
-                return;
-            }
-
-            currentCatalog = CurrentDirrectory.Text;
-            CurrentDir.Text = currentCatalog;
-            WriteFileAndDirrectories();
+            ExecuteCd();
         }
 
         private void PrevButton_Click(object sender, RoutedEventArgs e) 
@@ -70,7 +63,6 @@ namespace MenuParadigm
 
             currentCatalog = childDir;
             CurrentDirrectory.Text = childDir;
-            CurrentDir.Text = childDir;
             WriteFileAndDirrectories();
         }
 
@@ -84,7 +76,6 @@ namespace MenuParadigm
             }
             currentCatalog = parent;
             CurrentDirrectory.Text = parent;
-            CurrentDir.Text = parent;
             WriteFileAndDirrectories();
         }
 
@@ -108,20 +99,17 @@ namespace MenuParadigm
                 return;
             }
 
+            var command = new CfCommand();
+
             if (IsAllFiles.IsChecked ?? false)
             {
-                try
+                var res = command.Execute($"{FormatName.Text} *",currentCatalog).Result;
+                if (res.Errors.Count > 0) 
                 {
-                    var command = $"cf {FormatName.Text} *";
-                    DirectoryWorker.ExecuteCf(command, currentCatalog);
-                    WriteFileAndDirrectories();
-                    return;
+                    MessageBox.Show(string.Join('\n', res.Errors));
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    WriteFileAndDirrectories();
-                }
+                
+                WriteFileAndDirrectories();
             }
             else 
             {
@@ -136,17 +124,11 @@ namespace MenuParadigm
                 {
                     files += (f as string) + " ";
                 }
-
-                try
+                var res = command.Execute($"{ FormatName.Text } { files}",currentCatalog).Result;
+                WriteFileAndDirrectories();
+                if (res.Errors.Count > 0)
                 {
-                    var command = $"cf {FormatName.Text} {files}";
-                    DirectoryWorker.ExecuteCf(command, currentCatalog);
-                    WriteFileAndDirrectories();
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(string.Join('\n', res.Errors));
                 }
             }
 
@@ -162,6 +144,49 @@ namespace MenuParadigm
             var dirInfo = new DirectoryInfo(currentCatalog);
             var files = dirInfo.GetFiles().Select(fi=>fi.Name);
             FilesList.ItemsSource = files;
+        }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ExecuteCd();
+            }
+        }
+
+        private void ExecuteCd() 
+        {
+            var command = new CdCommand();
+            var res = command.Execute(CurrentDirrectory.Text, currentCatalog).Result;
+            if (res.Errors.Count > 0)
+            {
+                MessageBox.Show(string.Join('\n', res.Errors));
+                CurrentDirrectory.Text = currentCatalog;
+                return;
+            }
+
+            currentCatalog = CurrentDirrectory.Text;
+            WriteFileAndDirrectories();
+        }
+
+        private void MouseDown_Click(object sender, MouseEventArgs e) 
+        {
+            if (GridList.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите дирректорию изи списка");
+                return;
+            }
+
+            var childDir = currentCatalog + $"\\{(GridList.SelectedItem as Info).Name}";
+            if (!Directory.Exists(childDir))
+            {
+                MessageBox.Show("Такой дирректории не существует");
+                return;
+            }
+
+            currentCatalog = childDir;
+            CurrentDirrectory.Text = childDir;
+            WriteFileAndDirrectories();
         }
     }
 }
